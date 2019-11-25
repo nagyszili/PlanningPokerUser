@@ -35,6 +35,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference group;
     private DatabaseReference activeFeature;
     private String userName;
+    private boolean active;
     private User user;
 
     private Feature aFeature;
@@ -53,6 +54,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
         final View view = inflater.inflate(R.layout.vote_fragment_layout, container, false);
         featureText = view.findViewById(R.id.featureName);
         voteButton = view.findViewById(R.id.voteButton);
+        user = new User();
 
         Bundle args = getArguments();
         userName = args != null ? args.getString("userName") : null;
@@ -68,9 +70,12 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
                 Feature feature = dataSnapshot.getValue(Feature.class);
                 if (feature != null) {
                     featureText.setText(feature.getName());
+                    active = true;
 
                 } else {
                     featureText.setText("No Active Feature!");
+                    active = false;
+
                 }
 
             }
@@ -115,33 +120,40 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
         if (voteValue.isEmpty()) {
             Toast.makeText(context, "Please click a value!", Toast.LENGTH_SHORT).show();
         } else {
-            user = new User(userName);
+
             user.setVotedValue(voteValue);
+            user.setName(userName);
 
-            activeFeature.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    aFeature = dataSnapshot.getValue(Feature.class);
+            if (active)
+            {
+                activeFeature.child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
+            }
 
-                    if (aFeature != null) {
-                        Toast.makeText(context, "addVotedUser!", Toast.LENGTH_SHORT).show();
+//            activeFeature.addListenerForSingleValueEvent(new ValueEventListener() {
+////                @Override
+////                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                    aFeature = dataSnapshot.getValue(Feature.class);
+////
+////                    if (aFeature != null) {
+////                        Toast.makeText(context, "addVotedUser!", Toast.LENGTH_SHORT).show();
+////
+//////                        aFeature.addVotedUser(user);
+//////                        activeFeature.setValue(aFeature);
+////                        activeFeature.child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
+////                    }
+////                    else{
+////                        Toast.makeText(context, "Not addVotedUser!", Toast.LENGTH_SHORT).show();
+////
+////                    }
+////                }
+////
+////                @Override
+////                public void onCancelled(@NonNull DatabaseError databaseError) {
+////                    Toast.makeText(context, "Database Error!", Toast.LENGTH_SHORT).show();
+////
+////                }
+////            });
 
-                        aFeature.addVotedUser(user);
-                        activeFeature.setValue(aFeature);
-
-                    }
-                    else{
-                        Toast.makeText(context, "Not addVotedUser!", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(context, "Database Error!", Toast.LENGTH_SHORT).show();
-
-                }
-            });
 
 
 

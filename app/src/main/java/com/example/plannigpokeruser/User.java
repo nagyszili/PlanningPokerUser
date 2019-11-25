@@ -13,7 +13,6 @@ public class User {
 
     public User(String name) {
         this.id += 1;
-
         this.name = name;
     }
 

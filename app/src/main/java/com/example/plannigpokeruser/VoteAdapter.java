@@ -17,7 +17,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Integer> items;
-    private String voteValue;
+    private String voteValue = "";
 
     public VoteAdapter() {
     }
@@ -102,6 +102,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
                         break;
                     }
                     default: {
+                        voteValue = "";
 //                        Toast.makeText(context, "Please click a value!", Toast.LENGTH_SHORT).show();
                     }
                 }
