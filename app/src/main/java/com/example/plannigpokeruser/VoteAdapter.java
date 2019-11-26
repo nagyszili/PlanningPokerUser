@@ -1,6 +1,7 @@
 package com.example.plannigpokeruser;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VoteAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final VoteAdapter.ViewHolder holder, final int position) {
 
         holder.imageButton.setBackgroundResource(items.get(position));
         holder.imageButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +45,8 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
             public void onClick(View view) {
 //                voteValue = position;
 //                Toast.makeText(context,"Card is clicked " + position, Toast.LENGTH_SHORT).show();
+//                holder.itemView.setBackgroundColor(Color.parseColor("#000000"));
+
 
                 switch (position) {
                     case 0: {
@@ -72,7 +75,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
                         break;
                     }
                     case 5: {
-                        voteValue = "Three";
+                        voteValue = "Ten";
                         Toast.makeText(context, "Ten", Toast.LENGTH_SHORT).show();
                         break;
                     }
@@ -82,12 +85,16 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
                         break;
                     }
                     case 7: {
-                        voteValue = "Three";
+                        voteValue = "Fifty";
+                        holder.imageButton.setBackgroundResource(items.get(position));
+                        holder.imageButton.setBackgroundResource(R.drawable.ic_fifty_clicked);
                         Toast.makeText(context, "Fifty", Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case 8: {
                         voteValue = "One Hundred";
+                        holder.imageButton.setBackgroundResource(items.get(position));
+                        holder.imageButton.setBackgroundResource(R.drawable.ic_one_hundred_clicked);
                         Toast.makeText(context, "One Hundred", Toast.LENGTH_SHORT).show();
                         break;
                     }

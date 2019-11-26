@@ -45,6 +45,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
 
     public VoteFragment(Context context) {
         this.context = context;
+
     }
 
     @Nullable
@@ -54,7 +55,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
         final View view = inflater.inflate(R.layout.vote_fragment_layout, container, false);
         featureText = view.findViewById(R.id.featureName);
         voteButton = view.findViewById(R.id.voteButton);
-        user = new User();
+
 
         Bundle args = getArguments();
         userName = args != null ? args.getString("userName") : null;
@@ -67,9 +68,9 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
         activeFeature.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Feature feature = dataSnapshot.getValue(Feature.class);
-                if (feature != null) {
-                    featureText.setText(feature.getName());
+                aFeature = dataSnapshot.getValue(Feature.class);
+                if (aFeature != null) {
+                    featureText.setText(aFeature.getName());
                     active = true;
 
                 } else {
@@ -93,6 +94,12 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void addNumbers() {
@@ -119,17 +126,20 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
         voteValue = adapter.getVoteValue();
         if (voteValue.isEmpty()) {
             Toast.makeText(context, "Please click a value!", Toast.LENGTH_SHORT).show();
-        } else {
 
+        } else {
+            this.user = new User();
             user.setVotedValue(voteValue);
             user.setName(userName);
 
             if (active)
             {
                 activeFeature.child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
+                int id = aFeature.getId();
+                group.child("features").child(String.valueOf(id)).child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
             }
 
-//            activeFeature.addListenerForSingleValueEvent(new ValueEventListener() {
+////            activeFeature.addListenerForSingleValueEvent(new ValueEventListener() {
 ////                @Override
 ////                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 ////                    aFeature = dataSnapshot.getValue(Feature.class);

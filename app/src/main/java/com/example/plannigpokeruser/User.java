@@ -2,7 +2,7 @@ package com.example.plannigpokeruser;
 
 public class User {
 
-    private static int id;
+    private static int id=0;
     private String name;
     private String votedValue;
 
