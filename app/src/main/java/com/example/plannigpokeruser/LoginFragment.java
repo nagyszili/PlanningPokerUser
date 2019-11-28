@@ -68,7 +68,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     if (dataSnapshot.child(groupId).exists())
                     {
-                        startVoteFragment(userName,groupId);
+                        strVoteFragment(userName,groupId);
                     } else {
 //                        Toast.makeText(getContext(), "This group is not created!", Toast.LENGTH_SHORT).show();
                         Toast.makeText(getContext(), "This group does not exist!", Toast.LENGTH_SHORT).show();
@@ -91,14 +91,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void startVoteFragment(String userName, String groupId) {
+    private void strVoteFragment(String userName, String groupId) {
         Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
+//        bundle.putString("userName", userName);
         bundle.putString("groupId", groupId);
+        User user = new User();
+        user.setName(userName);
+//        bundle.putBundle("user",user);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        VoteFragment voteFragment = new VoteFragment(context);
+        VoteFragment voteFragment = new VoteFragment(context,user);
         voteFragment.setArguments(bundle);
         transaction.replace(R.id.container, voteFragment);
         transaction.addToBackStack(null);

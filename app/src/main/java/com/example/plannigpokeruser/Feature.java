@@ -1,36 +1,38 @@
 package com.example.plannigpokeruser;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Feature {
 
     private String name;
-    private static int id;
+    private static int count;
+    private int id;
     private boolean active;
     private ArrayList<User> usersVoted = new ArrayList<>();
-//    private Map<String,User> usersVote;
 
     public Feature() {
-        this.id += 1;
+        count += 1;
+        this.id = count;
     }
 
     public Feature(String name) {
         this.name = name;
-        this.id += 1;
+        count += 1;
+        this.id = count;
 
     }
 
-    public Feature(String name, int id) {
-        this.name = name;
-        this.id = id;
-    }
+//    public Feature(String name, int id) {
+//        this.name = name;
+//        count += 1;
+//        this.id = id;
+//    }
 
-    public Feature(String name, int id, boolean active) {
-        this.name = name;
-        this.id = id;
-        this.active = active;
-    }
+//    public Feature(String name, int id, boolean active) {
+//        this.name = name;
+//        this.id = id;
+//        this.active = active;
+//    }
 
     public String getName() {
         return name;
@@ -39,6 +41,11 @@ public class Feature {
     public int getId() {
         return id;
     }
+
+    public int getCount() {
+        return count;
+    }
+
 
     public boolean isActive() {
         return active;
@@ -52,9 +59,9 @@ public class Feature {
         this.name = name;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public void setActive(boolean active) {
         this.active = active;
@@ -64,8 +71,7 @@ public class Feature {
         this.usersVoted = usersVoted;
     }
 
-    public void addVotedUser(User user)
-    {
+    public void addVotedUser(User user) {
         this.usersVoted.add(user);
     }
 }

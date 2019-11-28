@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thekhaeng.pushdownanim.PushDownAnim;
 
 import java.util.ArrayList;
 
@@ -43,8 +44,9 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
     public VoteFragment() {
     }
 
-    public VoteFragment(Context context) {
+    public VoteFragment(Context context,User user) {
         this.context = context;
+        this.user = user;
 
     }
 
@@ -58,8 +60,9 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
 
 
         Bundle args = getArguments();
-        userName = args != null ? args.getString("userName") : null;
+//        userName = args != null ? args.getString("userName") : null;
         final String groupId = args != null ? args.getString("groupId") : null;
+
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         group = database.getReference("groups/" + groupId);
@@ -87,7 +90,8 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        voteButton.setOnClickListener(this);
+//        voteButton.setOnClickListener(this);
+        PushDownAnim.setPushDownAnimTo( voteButton ).setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.gridRecyclerView);
         adapter = new VoteAdapter(getContext(), numbers);
@@ -128,9 +132,9 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(context, "Please click a value!", Toast.LENGTH_SHORT).show();
 
         } else {
-            this.user = new User();
+//            this.user = new User();
             user.setVotedValue(voteValue);
-            user.setName(userName);
+//            user.setName(userName);
 
             if (active)
             {
@@ -139,30 +143,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
                 group.child("features").child(String.valueOf(id)).child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
             }
 
-////            activeFeature.addListenerForSingleValueEvent(new ValueEventListener() {
-////                @Override
-////                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                    aFeature = dataSnapshot.getValue(Feature.class);
-////
-////                    if (aFeature != null) {
-////                        Toast.makeText(context, "addVotedUser!", Toast.LENGTH_SHORT).show();
-////
-//////                        aFeature.addVotedUser(user);
-//////                        activeFeature.setValue(aFeature);
-////                        activeFeature.child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
-////                    }
-////                    else{
-////                        Toast.makeText(context, "Not addVotedUser!", Toast.LENGTH_SHORT).show();
-////
-////                    }
-////                }
-////
-////                @Override
-////                public void onCancelled(@NonNull DatabaseError databaseError) {
-////                    Toast.makeText(context, "Database Error!", Toast.LENGTH_SHORT).show();
-////
-////                }
-////            });
+
 
 
 
