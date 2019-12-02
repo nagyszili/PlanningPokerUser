@@ -108,7 +108,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ViewHolder> {
                 }
 
 
-//                        Toast.makeText(context, voteValue, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, voteValue, Toast.LENGTH_SHORT).show();
 
 
             }

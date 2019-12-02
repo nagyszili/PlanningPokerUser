@@ -1,6 +1,7 @@
 package com.example.plannigpokeruser;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +23,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.thekhaeng.pushdownanim.PushDownAnim;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VoteFragment extends Fragment implements View.OnClickListener {
 
@@ -38,7 +43,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
     private String userName;
     private boolean active;
     private User user;
-
+    private String groupId;
     private Feature aFeature;
 
     public VoteFragment() {
@@ -61,7 +66,7 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
 
         Bundle args = getArguments();
 //        userName = args != null ? args.getString("userName") : null;
-        final String groupId = args != null ? args.getString("groupId") : null;
+        groupId = args != null ? args.getString("groupId") : null;
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -108,17 +113,21 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
 
     private void addNumbers() {
 
-        numbers.add(R.drawable.ic_one);
-        numbers.add(R.drawable.ic_two);
-        numbers.add(R.drawable.ic_three);
-        numbers.add(R.drawable.ic_five);
-        numbers.add(R.drawable.ic_seven);
-        numbers.add(R.drawable.ic_ten);
-        numbers.add(R.drawable.ic_twenty);
-        numbers.add(R.drawable.ic_fifty);
-        numbers.add(R.drawable.ic_one_hundred);
-        numbers.add(R.drawable.ic_question);
-        numbers.add(R.drawable.ic_coffee_cup);
+        if (numbers.isEmpty()){
+            numbers.add(R.drawable.ic_one);
+            numbers.add(R.drawable.ic_two);
+            numbers.add(R.drawable.ic_three);
+            numbers.add(R.drawable.ic_five);
+            numbers.add(R.drawable.ic_seven);
+            numbers.add(R.drawable.ic_ten);
+            numbers.add(R.drawable.ic_twenty);
+            numbers.add(R.drawable.ic_fifty);
+            numbers.add(R.drawable.ic_one_hundred);
+            numbers.add(R.drawable.ic_question);
+            numbers.add(R.drawable.ic_coffee_cup);
+
+        }
+
 
 
     }
@@ -132,15 +141,33 @@ public class VoteFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(context, "Please click a value!", Toast.LENGTH_SHORT).show();
 
         } else {
+//            Gson gson = new Gson();
+//            SharedPreferences mPrefs = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+//            String json = mPrefs.getString("User", "");
+//            User user = gson.fromJson(json, User.class);
+
 //            this.user = new User();
-            user.setVotedValue(voteValue);
+            this.user.setVotedValue(voteValue);
 //            user.setName(userName);
 
             if (active)
             {
-                activeFeature.child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
+                activeFeature.child("usersVoted").push().setValue(user);
                 int id = aFeature.getId();
-                group.child("features").child(String.valueOf(id)).child("usersVoted").child(String.valueOf(user.getId())).setValue(user);
+                group.child("features").child(String.valueOf(id)).child("usersVoted").push().setValue(user);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("groupId", groupId);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                ListVoteFragment listVoteFragment = new ListVoteFragment(context);
+                listVoteFragment.setArguments(bundle);
+
+                transaction.replace(R.id.container, listVoteFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
             }
 
 

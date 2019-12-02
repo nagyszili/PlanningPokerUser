@@ -1,6 +1,7 @@
 package com.example.plannigpokeruser;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
@@ -28,6 +30,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText groupIdEditText;
     private Button joinBtn;
     private Context context;
+    public static final String MY_PREFS_NAME = "SharedPreferences";
 
     public LoginFragment() {
     }
@@ -92,11 +95,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void strVoteFragment(String userName, String groupId) {
+
+//        SharedPreferences  mPrefs = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        User user = new User(userName);
+//        user.setName(userName);
+
+//        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+//        Gson gson = new Gson();
+//        String json = gson.toJson(user);
+//        prefsEditor.putString("User", json);
+//        prefsEditor.commit();
+
         Bundle bundle = new Bundle();
 //        bundle.putString("userName", userName);
         bundle.putString("groupId", groupId);
-        User user = new User();
-        user.setName(userName);
+
 //        bundle.putBundle("user",user);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -106,6 +119,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         transaction.replace(R.id.container, voteFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+//        prefsEditor.apply();
     }
 
 
